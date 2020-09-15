@@ -19,12 +19,7 @@ void encodeOneStep(const char* filename, std::vector<unsigned char>& image, unsi
 }
 
 optional<float> raySphereIntersect(Rayon r, Sphere s) {
-    // - r0: ray origin
-    // - rd: normalized ray direction
-    // - s0: sphere center
-    // - sr: sphere radius
-    // - Returns distance from r0 to first intersecion with sphere,
-    //   or -1.0 if no intersection.
+    
     float a = r.GetDirection().dot(r.GetDirection());
     Vector3 s0_r0 = r.GetOrigin() - s.GetCenter();
     float b = 2.0 * r.GetDirection().dot(s0_r0);
@@ -41,7 +36,7 @@ optional<float> raySphereIntersect(Rayon r, Sphere s) {
     }
     else
     {
-        return std::nullopt;
+        return nullopt;
     }
 }
 
@@ -61,7 +56,7 @@ int main(int argc, char* argv[])
     const char* filename = argc > 1 ? argv[1] : "test.png";
     vector<Sphere> spheres;   
     spheres.push_back(Sphere(100.0f, Point(200, 300, 500)));
-    spheres.push_back(Sphere(10.0f, Point(100, 100, 500)));
+    spheres.push_back(Sphere(110.0f, Point(200, 100, 400)));
 
     //generate some image
     unsigned width = 512, height = 512;
@@ -69,31 +64,35 @@ int main(int argc, char* argv[])
     image.resize(width * height * 4);
     for (unsigned y = 0; y < height; y++)
         for (unsigned x = 0; x < width; x++) {
-            
-            Rayon r(Point((float)x, (float)y, 0),Direction(0,0,1));
-
-            auto dst = raySphereIntersect(r,spheres[0]);
-
-            float dstMin = spheres[0].GetCenter().z - spheres[0].GetRadius();
-            float dstMax = spheres[0].GetCenter().z;
-            
-            if (dst)
+            Rayon r(Point((float)x, (float)y, 0), Direction(0, 0, 1));
+            optional<float>min_dst = nullopt;
+            for (int i = 0; i < spheres.size(); i++)
             {
-                if(dstMin-dstMax !=0)
+                auto dst = raySphereIntersect(r, spheres[i]);
+                if (dst)
                 {
-                    float coef = (dst.value() - dstMax) / (dstMin - dstMax);
-                    color(image, Vector3(x, y, 0), width,  coef* 255, 0*255, coef*255,255);
+                    if (!min_dst || min_dst.value() > dst.value())
+                    {
+                        min_dst = dst;
+                        float dstMin = spheres[i].GetCenter().z - spheres[i].GetRadius();
+                        float dstMax = spheres[i].GetCenter().z;
+                        if (dstMin - dstMax != 0)
+                        {
+                            float coef = (dst.value() - dstMax) / (dstMin - dstMax);
+                            color(image, Vector3(x, y, 0), width, coef * 255, 0 * 255, coef * 255, 255);
+                        }
+                        else
+                        {
+                            color(image, Vector3(x, y, 0), width, 255, 255, 255, 255);
+                        }
+                    }
                 }
-                else
+                else if (!min_dst)
                 {
-                color(image, Vector3(x, y, 0), width, 255,255,255, 255);
+                    color(image, Vector3(x, y, 0), width,0, 0, 0, 255);
                 }
+
             }
-            else
-            {
-                color(image, Vector3(x, y, 0), width, 0,0,0,255);
-            }
-            
         }
 
     encodeOneStep(filename, image, width, height);
