@@ -1,7 +1,13 @@
 ﻿  Source.cpp
 D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(25,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(27,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(32,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(31,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(44,38): warning C4244: 'argument': conversion from 'float' to 'const unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(44,45): warning C4244: '=': conversion from 'float' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=unsigned char
+          ]
 D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(45,38): warning C4244: 'argument': conversion from 'float' to 'const unsigned int', possible loss of data
 D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(45,45): warning C4244: '=': conversion from 'float' to '_Ty', possible loss of data
           with
@@ -20,12 +26,6 @@ D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(47,45): warning C4244: '
           [
               _Ty=unsigned char
           ]
-D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(48,38): warning C4244: 'argument': conversion from 'float' to 'const unsigned int', possible loss of data
-D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(48,45): warning C4244: '=': conversion from 'float' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=unsigned char
-          ]
 D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(69,31): warning C4018: '<': signed/unsigned mismatch
 D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(82,60): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(82,53): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
@@ -33,7 +33,10 @@ D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(82,50): warning C4244: '
 D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(86,60): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(86,53): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(86,50): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(92,52): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(92,45): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(92,42): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(93,52): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(93,45): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(93,42): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(104,56): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(104,49): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(104,46): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
   TP2RayTracing.vcxproj -> D:\M2\SyntheseM2\TP2RayTracing\Debug\TP2RayTracing.exe
