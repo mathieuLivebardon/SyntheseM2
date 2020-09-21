@@ -145,6 +145,7 @@
     <ClCompile Include="vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="Point.h" />

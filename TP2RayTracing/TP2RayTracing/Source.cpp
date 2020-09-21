@@ -6,6 +6,7 @@
 #include <optional>
 #include "Rayon.h"
 #include "Sphere.h"
+#include "Color.h"
 
 
 using namespace std;
@@ -47,15 +48,23 @@ void color(std::vector<unsigned char>& img, Vector3 pixel, float w, float r, flo
     img[4 *w * pixel.y + 4 * pixel.x + 3] = a;
 }
 
+Color computeColor(bool V)
+{
+    Vector3 vec;
+
+
+}
+
 
 
 int main(int argc, char* argv[])
 {
     //NOTE: this sample will overwrite the file or test.png without warning!
-    const char* filename = argc > 1 ? argv[1] : "test.png";
+    const char* filename = argc > 1 ? argv[1] : "RayTracing.png";
     vector<Sphere> spheres;   
     spheres.push_back(Sphere(100.0f, Point(100, 350, 400)));
-    spheres.push_back(Sphere(100.0f, Point(100, 100, 400)));
+    spheres.push_back(Sphere(55.0f, Point(100, 100, 400)));
+    spheres.push_back(Sphere(55.0f, Point(400, 325, 400)));
 
     //generate some image
     unsigned width = 512, height = 512;
@@ -98,7 +107,7 @@ int main(int argc, char* argv[])
             {
                 for (size_t i = 0; i < spheres.size(); i++)
                 {
-                    auto lampe = raySphereIntersect(Rayon(Point((float)x, (float)y, min_dst.value() + 0.02f), Direction(0,1,0)), spheres[i]);
+                    auto lampe = raySphereIntersect(Rayon(Point((float)x, (float)y, min_dst.value() - 0.02f), Direction(1,1,0)), spheres[i]);
                     if (lampe)
                     {
                         color(image, Vector3(x, y, 0), width, 0, 0, 0, 255);
