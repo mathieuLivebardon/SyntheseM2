@@ -13,6 +13,11 @@ public:
 		vec3_Dir = Vector3(0, 0, 0);
 	}
 
+	Direction(Vector3 vec)
+	{
+		vec3_Dir = vec;
+	}
+
 	Direction(float x, float y, float z)
 	{
 		vec3_Dir = Vector3(x, y, z);

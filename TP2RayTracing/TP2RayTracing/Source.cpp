@@ -81,26 +81,26 @@ int main(int argc, char* argv[])
     //NOTE: this sample will overwrite the file or test.png without warning!
     const char* filename = argc > 1 ? argv[1] : "RayTracing.png";
     vector<Sphere> spheres;   
-    spheres.push_back(Sphere(54.0f, Point(100, 300, 200)));
-    spheres.push_back(Sphere(50.0f, Point(100, 120, 200)));
-    spheres.push_back(Sphere(55.0f, Point(400, 302, 200)));
+    spheres.push_back(Sphere(100.0f, Point(100, 700, 400)));
+    spheres.push_back(Sphere(200.0f, Point(200, 120, 400)));
+    spheres.push_back(Sphere(150.0f, Point(600, 702, 400)));
+
+    
 
     vector<Lampe> lampes;
-    lampes.push_back(Lampe(Point(252, 230, 200), Vector3(20000000, 20000000, 20000000)));
-    lampes.push_back(Lampe(Point(100, 500, 200), Vector3(20000000, 0, 0)));
-    /*Rayon r(Point((float)112, (float)138, 0), Direction(0, 0, 1));
-    auto dst = raySphereIntersect(r, spheres[1]);
-
-    auto lampe = raySphereIntersect(Rayon(Point(112,138,dst.value()), Direction(0, 1, 0)), spheres[2]);
-    cout << dst.value()<<endl;
-    cout << lampe.value()<<endl;*/
+    lampes.push_back(Lampe(Point(350, 400, 200), Vector3(20000000, 20000000, 20000000)));
+    lampes.push_back(Lampe(Point(145, 500, 400), Vector3(20000000, 0, 0)));
+    lampes.push_back(Lampe(Point(750, 110, 300), Vector3(0, 0, 20000000)));
+    
     //generate some image
-    unsigned width = 512, height = 512;
+    unsigned width = 1000, height = 1000;
     std::vector<unsigned char> image;
     image.resize(width * height * 4);
     for (unsigned y = 0; y < height; y++)
-        for (unsigned x = 0; x < width; x++) {
-            Rayon r(Point((float)x, (float)y, 0), Direction(0, 0, 1));                       
+    {
+        for (unsigned x = 0; x < width; x++) 
+        {
+            Rayon r(Point((float)x, (float)y, 0), Direction(0, 0, 1));
             for (int l = 0; l < lampes.size(); l++)
             {
                 Point X;
@@ -116,8 +116,8 @@ int main(int argc, char* argv[])
                     {
                         if (!min_dst || min_dst.value() > dst.value())
                         {
-                            min_dst = dst;                            
-                            sphereindex = i;  
+                            min_dst = dst;
+                            sphereindex = i;
                             X = Point((float)x, (float)y, min_dst.value() - 0.02f);
                             vec_dir = (lampes[l].GetPos() - X.GetPos()).normalize();
                             dir = Direction(vec_dir.x, vec_dir.y, vec_dir.z);
@@ -128,35 +128,74 @@ int main(int argc, char* argv[])
                                 auto interlampe = raySphereIntersect(Rayon(X, dir), spheres[j]);
                                 if (interlampe)
                                 {
-                                    if(interlampe.value() < d)
+                                    if (interlampe.value() < d)
                                     {
                                         lampe = interlampe;
                                     }
                                 }
                             }
-                        }         
+                        }
                     }
-                }         
+                }
                 if (min_dst)
-                {    
-                    
+                {
+
                     if (lampe)
                     {
-                        color(image, Vector3(x, y, 0), width, 00,0, 0, 255);
+                        color(image, Vector3(x, y, 0), width, 0, 0, 0, 255);
                     }
                     else
                     {
-                        Color c = computeColor(lampes[l], spheres[sphereindex], Vector3(1, 1, 1), X);
+                        Color c = computeColor(lampes[l], spheres[sphereindex], Vector3(1, 0, 1), X);
                         //color(image, Vector3(x, y, 0), width,255,255,255, 255);
                         color(image, Vector3(x, y, 0), width, c.GetColorRGB().x, c.GetColorRGB().y, c.GetColorRGB().z, 255);
-                    }                   
+                    }
                 }
                 else
                 {
-                    color(image, Vector3(x, y, 0), width, 255, 0, 255, 255);
+                    color(image, Vector3(x, y, 0), width, 255, 255, 255, 50);
                 }
             }
         }
+    }
+
+        vector<Sphere> sphereMiror;
+        sphereMiror.push_back(Sphere(100.0f,Point(600,300,500)));
+        for (unsigned y = 0; y < height; y++)
+        {
+            for (unsigned x = 0; x < width; x++) 
+            {
+                Rayon r(Point((float)x, (float)y, 0), Direction(0, 0, 1));
+                for (int i = 0; i < sphereMiror.size(); i++)
+                {
+                    auto dst = raySphereIntersect(r, spheres[i]);
+                    if (dst)
+                    {
+                        Point X((float)x, (float)y, dst.value()-0.02f);
+                        Vector3 I = r.GetDirection();
+                        Vector3 N = X.GetPos() - spheres[i].GetCenter();
+                        N = N.normalize();
+
+                        Direction R((-I.dot(N) * N * 2 + I).normalize());
+
+                        Rayon r2(X, R);
+                        for (int j = 0; j < sphereMiror.size(); j++)
+                        {
+                            auto dst2 = raySphereIntersect(r2, spheres[i]);
+                            if (dst2)
+                            {
+                                
+                            }
+                        }
+                        
+                    }
+
+                }
+
+            }
+        }
+
+
                 
     
     encodeOneStep(filename, image, width, height);
