@@ -159,19 +159,19 @@ int main(int argc, char* argv[])
     //NOTE: this sample will overwrite the file or test.png without warning!
     const char* filename = argc > 1 ? argv[1] : "RayTracing.png";
     vector<Sphere> spheres;   
-    spheres.push_back(Sphere(100.0f, Point(100, 700, 400)));
-    spheres.push_back(Sphere(200.0f, Point(200, 120, 400)));
-    spheres.push_back(Sphere(150.0f, Point(600, 702, 400)));
-    spheres.push_back(Sphere(100.0f, Point(600, 300, 500), true));
-    spheres.push_back(Sphere(500.0f, Point(500, 1250, 500)));
+    spheres.push_back(Sphere(100.0f, Point(100, 700, 400),Vector3(1,0,0)));
+    spheres.push_back(Sphere(200.0f, Point(200, 120, 400),Vector3(1,0,1)));
+   // spheres.push_back(Sphere(150.0f, Point(600, 702, 400),Vector3(0, 0, 1)));
+    spheres.push_back(Sphere(100.0f, Point(600, 300, 500),Vector3(1,1,1), true));
+    spheres.push_back(Sphere(1000.0f, Point(500, 1500, 1000),Vector3(0, 1, 1)));
 
 
     
 
     vector<Lampe> lampes;
-    lampes.push_back(Lampe(Point(350, 400, 200), Vector3(20000000, 20000000, 20000000)));
-    lampes.push_back(Lampe(Point(145, 500, 400), Vector3(20000000, 0, 0)));
-    lampes.push_back(Lampe(Point(750, 110, 300), Vector3(0, 0, 20000000)));
+    lampes.push_back(Lampe(Point(350, 400, 200), Vector3(60000000, 60000000, 60000000)));
+    lampes.push_back(Lampe(Point(145, 500, 400), Vector3(60000000, 0, 0)));
+    lampes.push_back(Lampe(Point(750, 110, 300), Vector3(0, 0, 60000000)));
     
     //generate some image
     unsigned width = 1000, height = 1000;
