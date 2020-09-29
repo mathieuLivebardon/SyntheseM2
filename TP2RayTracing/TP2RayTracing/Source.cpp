@@ -28,8 +28,8 @@ optional<float> raySphereIntersect(Rayon r, Sphere s) {
     Vector3 s0_r0 = r.GetOrigin() - s.GetCenter();
     float b = 2.0 * r.GetDirection().dot(s0_r0);
     float c = s0_r0.dot(s0_r0) - (s.GetRadius() * s.GetRadius());
-    double delta = pow(b,2) - 4.0 * a * c;
-    if (delta >=  0.0) {
+    double delta = pow(b, 2) - 4.0 * a * c;
+    if (delta >= 0.0) {
         float resultat = (-b - sqrt(delta)) / (2.0 * a);
         if (resultat >= 0)
         {
@@ -37,7 +37,7 @@ optional<float> raySphereIntersect(Rayon r, Sphere s) {
         }
     }
     return nullopt;
-    
+       
 }
 
 void color(std::vector<unsigned char>& img, Vector3 pixel, float w, float r, float g, float b, float a)
@@ -74,6 +74,84 @@ Color computeColor(Lampe lampe, Sphere S, Vector3 A,Point X)
     return Color(col.x, col.y, col.z);
 }
 
+void lancerRayon(Rayon r, vector<Lampe> lampes, vector<Sphere> spheres, vector<unsigned char>& image, unsigned width)
+{
+    for (int l = 0; l < lampes.size(); l++)
+    {
+        Point X;
+        Vector3 vec_dir;
+        Direction dir;
+        int sphereindex = 0;
+        optional<float>lampe = nullopt;
+        optional<float>min_dst = nullopt;
+        for (int i = 0; i < spheres.size(); i++)
+        {
+            auto dst = raySphereIntersect(r, spheres[i]);
+            if (dst && !spheres[i].Mirror())
+            {
+                if (!min_dst || min_dst.value() > dst.value())
+                {
+                    min_dst = dst;
+                    sphereindex = i;
+                    X = Point(r.GetOrigin().x, r.GetOrigin().y, min_dst.value() - 0.02f);
+                    vec_dir = (lampes[l].GetPos() - X.GetPos()).normalize();
+                    dir = Direction(vec_dir.x, vec_dir.y, vec_dir.z);
+                    Vector3 L = X.GetPos() - lampes[l].GetPos();
+                    float d = L.length();
+                    for (int j = 0; j < spheres.size(); j++)
+                    {
+                        auto interlampe = raySphereIntersect(Rayon(X, dir), spheres[j]);
+                        if (interlampe)
+                        {
+                            if (interlampe.value() < d)
+                            {
+                                lampe = interlampe;
+                            }
+                        }
+                    }
+                }
+            }
+            else if(dst && spheres[i].Mirror())
+            {
+                min_dst = dst;
+                Point X(r.GetOrigin().x, r.GetOrigin().y, dst.value() - 0.02f);
+                Vector3 I = r.GetDirection();
+                Vector3 N = X.GetPos() - spheres[i].GetCenter();
+                N = N.normalize();
+
+                Direction R((-I.dot(N) * N * 2 + I).normalize());
+
+                Rayon r2(X, R);
+                lancerRayon(r2, lampes, spheres, image, width);
+            }
+
+        }
+        if (min_dst)
+        {
+
+            if (lampe)
+            {
+                color(image, Vector3(r.GetOrigin().x, r.GetOrigin().y, 0), width, 0, 0, 0, 255);
+            }
+            else
+            {
+                Color c = computeColor(lampes[l], spheres[sphereindex], Vector3(1, 1, 1), X);
+                color(image, Vector3(r.GetOrigin().x, r.GetOrigin().y, 0), width, c.GetColorRGB().x, c.GetColorRGB().y, c.GetColorRGB().z, 255);
+            }
+        }
+        else
+        {
+            color(image, Vector3(r.GetOrigin().x, r.GetOrigin().y, 0), width, 100, 100, 100, 255);
+        }
+    }
+
+}
+
+
+
+
+
+
 
 
 int main(int argc, char* argv[])
@@ -84,6 +162,9 @@ int main(int argc, char* argv[])
     spheres.push_back(Sphere(100.0f, Point(100, 700, 400)));
     spheres.push_back(Sphere(200.0f, Point(200, 120, 400)));
     spheres.push_back(Sphere(150.0f, Point(600, 702, 400)));
+    spheres.push_back(Sphere(100.0f, Point(600, 300, 500), true));
+    spheres.push_back(Sphere(500.0f, Point(500, 1250, 500)));
+
 
     
 
@@ -100,68 +181,13 @@ int main(int argc, char* argv[])
     {
         for (unsigned x = 0; x < width; x++) 
         {
-            Rayon r(Point((float)x, (float)y, 0), Direction(0, 0, 1));
-            for (int l = 0; l < lampes.size(); l++)
-            {
-                Point X;
-                Vector3 vec_dir;
-                Direction dir;
-                int sphereindex = 0;
-                optional<float>lampe = nullopt;
-                optional<float>min_dst = nullopt;
-                for (int i = 0; i < spheres.size(); i++)
-                {
-                    auto dst = raySphereIntersect(r, spheres[i]);
-                    if (dst)
-                    {
-                        if (!min_dst || min_dst.value() > dst.value())
-                        {
-                            min_dst = dst;
-                            sphereindex = i;
-                            X = Point((float)x, (float)y, min_dst.value() - 0.02f);
-                            vec_dir = (lampes[l].GetPos() - X.GetPos()).normalize();
-                            dir = Direction(vec_dir.x, vec_dir.y, vec_dir.z);
-                            Vector3 L = X.GetPos() - lampes[l].GetPos();
-                            float d = L.length();
-                            for (int j = 0; j < spheres.size(); j++)
-                            {
-                                auto interlampe = raySphereIntersect(Rayon(X, dir), spheres[j]);
-                                if (interlampe)
-                                {
-                                    if (interlampe.value() < d)
-                                    {
-                                        lampe = interlampe;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (min_dst)
-                {
-
-                    if (lampe)
-                    {
-                        color(image, Vector3(x, y, 0), width, 0, 0, 0, 255);
-                    }
-                    else
-                    {
-                        Color c = computeColor(lampes[l], spheres[sphereindex], Vector3(1, 0, 1), X);
-                        //color(image, Vector3(x, y, 0), width,255,255,255, 255);
-                        color(image, Vector3(x, y, 0), width, c.GetColorRGB().x, c.GetColorRGB().y, c.GetColorRGB().z, 255);
-                    }
-                }
-                else
-                {
-                    color(image, Vector3(x, y, 0), width, 255, 255, 255, 50);
-                }
-            }
+            lancerRayon(Rayon(Point((float)x, (float)y, 0), Direction(0, 0, 1)),lampes,spheres,image, width);
+            
         }
     }
 
-        vector<Sphere> sphereMiror;
-        sphereMiror.push_back(Sphere(100.0f,Point(600,300,500)));
-        for (unsigned y = 0; y < height; y++)
+        
+        /*for (unsigned y = 0; y < height; y++)
         {
             for (unsigned x = 0; x < width; x++) 
             {
@@ -193,11 +219,9 @@ int main(int argc, char* argv[])
                 }
 
             }
-        }
+        }*/
 
 
-                
-    
     encodeOneStep(filename, image, width, height);
 	 
 	return 0;
