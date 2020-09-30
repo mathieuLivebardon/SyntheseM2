@@ -108,9 +108,10 @@ void lancerRayon(Rayon r, vector<Lampe> lampes, vector<Sphere> spheres, vector<u
 
         if (min_dst)
         {
-            float epsilone = -0.1;
+            float epsilone = -0.05;
             
-            X = Point(r.GetOrigin().x + min_dst.value() * r.GetDirection().x, r.GetOrigin().y + min_dst.value() * r.GetDirection().y, r.GetOrigin().z + min_dst.value() * r.GetDirection().z + r.GetDirection().z*epsilone);
+            X = Point(r.GetOrigin().x + min_dst.value() * r.GetDirection().x, r.GetOrigin().y + min_dst.value() * r.GetDirection().y, r.GetOrigin().z + min_dst.value() * r.GetDirection().z);
+            X = Point(X.GetPos() + r.GetDirection()* epsilone);
             if (!spheres[sphereindex].Mirror())
             {               
                 vec_dir = (lampes[l].GetPos() - X.GetPos()).normalize();

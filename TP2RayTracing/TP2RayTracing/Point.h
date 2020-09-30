@@ -17,6 +17,11 @@ public :
 		vec3_Position = Vector3(x, y, z);
 	}
 
+	Point(Vector3 vec3)
+	{
+		vec3_Position =vec3;
+	}
+
 	Vector3 GetPos()
 	{
 		return vec3_Position;
