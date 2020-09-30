@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "lodepng.h"
 #include "vector3.h"
+#include <cstdint>
 #include <optional>
 #include "Rayon.h"
 #include "Sphere.h"
@@ -10,9 +11,11 @@
 #include "Lampe.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-
+#include <random>
 
 using namespace std;
+default_random_engine generator;
+uniform_real_distribution<float> distribution(-0.01, 0.01);
 
 void encodeOneStep(const char* filename, std::vector<unsigned char>& image, unsigned width, unsigned height) {
     //Encode the image
@@ -40,17 +43,13 @@ optional<float> raySphereIntersect(Rayon r, Sphere s) {
        
 }
 
-void color(std::vector<unsigned char>& img, Vector3 pixel, float w, float r, float g, float b, float a)
+void color(std::vector<double>& img, Vector3 pixel, float w, float r, float g, float b, float a)
 {
-    if (img[4 * w * pixel.y + 4 * pixel.x + 0] + r  > 255) { img[4 * w * pixel.y + 4 * pixel.x + 0] = 255; }
-    else{ img[4 * w * pixel.y + 4 * pixel.x + 0] += r; }
+    img[4 * w * pixel.y + 4 * pixel.x + 0] += r; 
     
-    if (img[4 * w * pixel.y + 4 * pixel.x + 1] + g > 255) { img[4 * w * pixel.y + 4 * pixel.x + 1] = 255; }
-    else{   img[4 * w * pixel.y + 4 * pixel.x + 1] += g; }
+    img[4 * w * pixel.y + 4 * pixel.x + 1] += g;
 
-    if (img[4 * w * pixel.y + 4 * pixel.x + 2] +b > 255) { img[4 * w * pixel.y + 4 * pixel.x + 2] = 255; }
-    else { img[4 * w * pixel.y + 4 * pixel.x + 2] += b; }
-
+    img[4 * w * pixel.y + 4 * pixel.x + 2] += b; 
     
     img[4 *w * pixel.y + 4 * pixel.x + 3] = a;
 }
@@ -93,8 +92,10 @@ void searchCloserObject(vector<Sphere> spheres,Rayon r, int &ispheres, optional<
 }
 
 
-void lancerRayon(Rayon r, vector<Lampe> lampes, vector<Sphere> spheres, vector<unsigned char>& image, unsigned width,Vector3 pixel)
+void lancerRayon(Rayon r, vector<Lampe> lampes, vector<Sphere> spheres, vector<double>& image, unsigned width,Vector3 pixel)
 {
+
+    r.SetDirection(Direction(Vector3(r.GetDirection().x + distribution(generator), r.GetDirection().y + distribution(generator), r.GetDirection().z + distribution(generator))));
     for (int l = 0; l < lampes.size(); l++)
     {
         Point X;
@@ -157,7 +158,18 @@ void lancerRayon(Rayon r, vector<Lampe> lampes, vector<Sphere> spheres, vector<u
     }
 }
 
+void uniformeImg(vector<double> &image, vector<unsigned char> &imageOut, int nbRayons)
+{
+    for (size_t i = 0; i < image.size(); i += 4)
+    {
+        imageOut[i] = clamp((int)(image[i] / nbRayons), 0,255);
+        imageOut[i+1] = clamp((int)(image[i+1] / nbRayons), 0,255);
+        imageOut[i+2] = clamp((int)(image[i+2] / nbRayons), 0,255);
+        imageOut[i + 3] = 255;
 
+    }
+
+}
 
 
 
@@ -184,22 +196,27 @@ int main(int argc, char* argv[])
     
     //generate some image
     unsigned width = 1000, height = 1000;
-    std::vector<unsigned char> image;
-    image.resize(width * height * 4);
+    vector<double> image((width * height * 4), 0.0);
+    vector<unsigned char> imageOut((width * height * 4), 0);
     Point Camera(500, 500, -1000);
+    int nbRayon = 1000;
+    
+
     for (unsigned y = 0; y < height; y++)
     {
         for (unsigned x = 0; x < width; x++) 
         {
-            Direction d = (Vector3(x, y, 0) - Camera.GetPos()).normalize();
-            lancerRayon(Rayon(Point((float)x, (float)y, 0), d),lampes,spheres,image, width, Vector3(x,y,0));       
+            for (size_t i = 0; i < nbRayon; i++)
+            {
+                Direction d = (Vector3(x, y, 0) - Camera.GetPos()).normalize();
+                lancerRayon(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
+            }
+            
         }
     }
 
-        
-
-
-    encodeOneStep(filename, image, width, height);
+    uniformeImg(image, imageOut, nbRayon);
+    encodeOneStep(filename, imageOut, width, height);
 	 
 	return 0;
 }

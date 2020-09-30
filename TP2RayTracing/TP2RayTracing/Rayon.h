@@ -22,5 +22,7 @@ public:
 		return dir_Direction.GetPos();
 	}
 
+	void SetDirection(Direction d) { dir_Direction = d; }
+
 
 };

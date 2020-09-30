@@ -18,6 +18,12 @@ public:
 		vec3_Color = Vector3(x, y, z);
 	}
 
+	Color(Vector3 vec3)
+	{
+		vec3_Color = vec3;
+	}
+
+
 	Vector3 GetColorRGB()
 	{
 		return vec3_Color;

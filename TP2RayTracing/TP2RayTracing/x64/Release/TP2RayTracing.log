@@ -1,0 +1,94 @@
+﻿  lodepng.cpp
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(711,54): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(729,35): warning C4267: '=': conversion from 'size_t' to 'unsigned short', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(730,39): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(753,37): warning C4267: '=': conversion from 'size_t' to 'unsigned short', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(770,38): warning C4267: '=': conversion from 'size_t' to 'unsigned short', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(3707,78): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(4661,33): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(4883,60): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(4888,83): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(4889,94): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(4890,83): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(4891,94): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(4892,83): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(4893,94): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(4894,78): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(5078,3): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(5102,7): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(5136,62): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(5153,3): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(5175,57): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(5206,57): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(5319,57): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\lodepng.cpp(5397,33): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+  Source.cpp
+  The contents of <optional> are available only with C++17 or later.
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(25,9): error C2143: syntax error: missing ';' before '<'
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(25,9): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(25,55): error C2143: syntax error: missing ';' before '{'
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(25,55): error C2447: '{': missing function header (old-style formal list?)
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(45,43): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(45,96): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(46,45): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(46,54): warning C4244: '+=': conversion from 'float' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=unsigned char
+          ]
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(48,43): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(48,95): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(49,47): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(49,56): warning C4244: '+=': conversion from 'float' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=unsigned char
+          ]
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(51,43): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(51,94): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(52,46): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(52,55): warning C4244: '+=': conversion from 'float' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=unsigned char
+          ]
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(55,38): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(55,45): warning C4244: '=': conversion from 'float' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=unsigned char
+          ]
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(72,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(77,80): error C2061: syntax error: identifier 'optional'
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(81,20): error C3861: 'raySphereIntersect': identifier not found
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(85,18): error C2065: 'min_dst': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(85,29): error C2065: 'min_dst': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(87,17): error C2065: 'min_dst': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(104,23): error C2062: type 'float' unexpected
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(105,23): error C2062: type 'float' unexpected
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(107,51): error C2065: 'min_dst': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(109,13): error C2065: 'min_dst': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(111,35): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(113,41): error C2065: 'min_dst': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(113,97): error C2065: 'min_dst': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(113,153): error C2065: 'min_dst': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(122,79): error C2065: 'lampe': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(123,21): error C2065: 'lampe': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(125,25): error C2065: 'lampe': undeclared identifier
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(128,61): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(129,45): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(133,45): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(139,57): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(140,41): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(157,33): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(194,63): warning C4305: 'argument': truncation from 'double' to '_Ty'
+          with
+          [
+              _Ty=float
+          ]
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(202,43): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(202,40): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(205,111): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(205,108): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  vector3.cpp
+D:\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\vector3.cpp(12,12): error C3861: 'valloc': identifier not found
