@@ -295,6 +295,13 @@ void createObject(vector<Sphere> &spheres, vector<Box3>& boxes, int nSphere)
     }
 }
 
+struct nodeTreeBox
+{
+    Box3 data;
+    struct nodeTreeBox* left;
+    struct nodeTreeBox* right;
+};
+
 
 
 int main(int argc, char* argv[])
@@ -306,8 +313,8 @@ int main(int argc, char* argv[])
     spheres.push_back(Sphere(200.0f, Point(200, 120, 700),Vector3(1,0,1)));
     spheres.push_back(Sphere(150.0f, Point(600, 702, 400),Vector3(0, 0, 1)));
     spheres.push_back(Sphere(100000.0f, Point(500, 101000, 500),Vector3(0, 1, 1)));
-    spheres.push_back(Sphere(100000.0f, Point(101000, 500, 500),Vector3(0, 1, 0)));*/
-    //spheres.push_back(Sphere(500.0f, Point(0, 0, 700),Vector3(0,0,0), true));
+    spheres.push_back(Sphere(100000.0f, Point(101000, 500, 500),Vector3(0, 1, 0)));
+    spheres.push_back(Sphere(500.0f, Point(0, 0, 700),Vector3(1,1,1), true));*/
 
 
 
@@ -322,7 +329,9 @@ int main(int argc, char* argv[])
     boxes.push_back(spheres[1]);
     boxes.push_back(spheres[2]);*/
     
-    createObject(spheres,boxes, 100);
+    //createObject(spheres,boxes, 100);
+
+
     //generate some image
     unsigned width = 1000, height = 1000;
     vector<double> image((width * height * 4), 0.0);
@@ -339,8 +348,8 @@ int main(int argc, char* argv[])
             for (size_t i = 0; i < nbRayonAntialiasing; i++)
             {
                 Direction d = (Vector3(x, y, 0) - Camera.GetPos()).normalize();
-                //lancerRayon(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
-                lancerRayon2(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));
+                lancerRayon(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
+                //lancerRayon2(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));
             }         
         }
     }
