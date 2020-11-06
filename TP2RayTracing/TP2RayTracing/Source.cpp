@@ -102,7 +102,7 @@ Color computeColor(Lampe lampe, Sphere S, Vector3 A,Point X)
     return Color(col.x, col.y, col.z);
 }
 
-void searchCloserObject2(vector<Box3> boxes,Rayon r, int &iboxes, optional<float> &min_dst)
+void searchCloserBox(vector<Box3> boxes,Rayon r, int &iboxes, optional<float> &min_dst)
 {
     for (int i = 0; i < boxes.size(); i++)
     {
@@ -148,7 +148,7 @@ void lancerRayon2(Rayon r, vector<Lampe> lampes, vector<Box3> boxes, vector<doub
         int boxindex = 0;
         optional<float>lampe = nullopt;
         optional<float>min_dst = nullopt;
-        searchCloserObject2(boxes, r, boxindex, min_dst);
+        searchCloserBox(boxes, r, boxindex, min_dst);
 
         if (min_dst)
         {
@@ -162,7 +162,7 @@ void lancerRayon2(Rayon r, vector<Lampe> lampes, vector<Box3> boxes, vector<doub
             L = Vector3(L.x, L.y, L.z);
             float d = L.length();
             int i;
-            searchCloserObject2(boxes, Rayon(X, dir), i, lampe);
+            searchCloserBox(boxes, Rayon(X, dir), i, lampe);
             if (lampe)
             {
                 if (lampe.value() > d)
@@ -289,7 +289,7 @@ void createObject(vector<Sphere> &spheres, vector<Box3>& boxes, int nSphere)
 {
     for (int i = 0; i < nSphere; i++)
     {
-        Sphere s(Sphere(RandomFloat(10, 100), Point(RandomFloat(0, 1100), RandomFloat(0, 1100), RandomFloat(700, 1000)), Vector3(RandomFloat(0, 1), RandomFloat(0, 1), RandomFloat(0, 1))));
+        Sphere s(Sphere(RandomFloat(10, 100), Point(RandomFloat(0, 1100), RandomFloat(0, 1100), RandomFloat(700, 5000)), Vector3(RandomFloat(0, 1), RandomFloat(0, 1), RandomFloat(0, 1))));
         spheres.push_back(s);
         boxes.push_back(Box3(s));
     }
@@ -317,7 +317,6 @@ int main(int argc, char* argv[])
     spheres.push_back(Sphere(500.0f, Point(0, 0, 700),Vector3(1,1,1), true));*/
 
 
-
     vector<Lampe> lampes;
     lampes.push_back(Lampe(Point(350, 400, 0), Vector3(600000000, 600000000, 600000000)));
     lampes.push_back(Lampe(Point(700, 0, 200), Vector3(600000000, 0, 0)));
@@ -328,6 +327,7 @@ int main(int argc, char* argv[])
     /*boxes.push_back(spheres[0]);
     boxes.push_back(spheres[1]);
     boxes.push_back(spheres[2]);*/
+    createObject(spheres, boxes, 100);
     
     //createObject(spheres,boxes, 100);
 
@@ -349,7 +349,7 @@ int main(int argc, char* argv[])
             {
                 Direction d = (Vector3(x, y, 0) - Camera.GetPos()).normalize();
                 lancerRayon(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
-                //lancerRayon2(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));
+                lancerRayon2(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));
             }         
         }
     }
