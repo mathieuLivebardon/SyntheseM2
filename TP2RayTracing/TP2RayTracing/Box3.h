@@ -8,7 +8,6 @@ class Box3
 	Vector3 vec3_Albedo;
 	Point pt_Center;
 
-
 public:
 	Vector3 bounds[2];
 	vector<Sphere> lst_spheres;

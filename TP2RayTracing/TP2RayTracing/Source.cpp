@@ -13,10 +13,35 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <random>
+#include <map>
 
 using namespace std;
 default_random_engine generator;
 uniform_real_distribution<float> distribution(-0.00f, 0.00f);
+
+// Comparator function to sort pairs
+// according to second value
+bool cmp(pair<int, float>& a,
+	pair<int, float>& b)
+{
+	return a.second < b.second;
+}
+
+// Function to sort the map according
+// to value in a (key-value) pairs
+void sort(map<int, float>& M)
+{
+	// Declare vector of pairs
+	vector<pair<int, float> > A;
+
+	// Copy key-value pair from Map
+	// to vector of pairs
+	for (auto& it : M) {
+		A.push_back(it);
+	}
+	// Sort using comparator function
+	sort(A.begin(), A.end(), cmp);
+}
 
 float RandomFloat(float a, float b) {
 	float random = ((float)rand()) / (float)RAND_MAX;
@@ -66,7 +91,7 @@ optional<float> rayAABIntersect(Rayon r, Box3 b)
 	float tmin = max(max(min(t0x, t1x), min(t0y, t1y)), min(t0z, t1z));
 	float tmax = min(min(max(t0x, t1x), max(t0y, t1y)), max(t0z, t1z));
 
-	if (tmax > 0 && tmin < tmax)
+	if (tmax > 0 && tmin < tmax && tmin >0)
 	{
 		return tmin;
 	}
@@ -118,6 +143,7 @@ void searchCloserBox(vector<Box3> boxes, Rayon r, int& iboxes, optional<float>& 
 		}
 	}
 }
+
 void searchCloserObject(vector<Sphere> spheres, Rayon r, int& ispheres, optional<float>& min_dst)
 {
 	for (int i = 0; i < spheres.size(); i++)
@@ -134,7 +160,33 @@ void searchCloserObject(vector<Sphere> spheres, Rayon r, int& ispheres, optional
 	}
 }
 
-void lancerRayon2(Rayon r, vector<Lampe> lampes, vector<Box3> boxes, vector<double>& image, unsigned width, Vector3 pixel)
+map<int, float> searchBox(vector<Box3> boxes, Rayon r)
+{
+	map<int, float> mapBiDst;
+	for (int bi = 0; bi < boxes.size(); bi++)
+	{
+		auto dst = rayAABIntersect(r, boxes[bi]);
+		if (dst)
+		{
+			mapBiDst.insert(pair<int, float>(bi, dst.value()));
+		}
+	}
+
+	sort(mapBiDst);
+
+	return mapBiDst;
+}
+
+void SearchSphereDich(Rayon r, vector<Box3> boxes)
+{
+	map<int, float> RIntersectB = searchBox(boxes, r);
+	for (auto it = RIntersectB.begin(); it != RIntersectB.end(); ++it)
+	{
+		cout <<"Box"<< it->first << " => " << it->second << " bMin : "<< boxes[it->first].bounds[0] << " bMax : " << boxes[it->first].bounds[1] << '\n';
+	}
+}
+
+void lancerRayonBox(Rayon r, vector<Lampe> lampes, vector<Box3> boxes, vector<double>& image, unsigned width, Vector3 pixel)
 {
 	for (int l = 0; l < lampes.size(); l++)
 	{
@@ -182,7 +234,7 @@ void lancerRayon2(Rayon r, vector<Lampe> lampes, vector<Box3> boxes, vector<doub
 	}
 }
 
-void lancerRayon(Rayon r, vector<Lampe> lampes, vector<Sphere> spheres, vector<double>& image, unsigned width, Vector3 pixel)
+void lancerRayonSphere(Rayon r, vector<Lampe> lampes, vector<Sphere> spheres, vector<double>& image, unsigned width, Vector3 pixel)
 {
 	r.SetDirection(Direction(Vector3(r.GetDirection().x + distribution(generator), r.GetDirection().y + distribution(generator), r.GetDirection().z + distribution(generator))));
 	for (int l = 0; l < lampes.size(); l++)
@@ -236,7 +288,7 @@ void lancerRayon(Rayon r, vector<Lampe> lampes, vector<Sphere> spheres, vector<d
 				N = N.normalize();
 				Direction R((-I.dot(N) * N * 2 + I).normalize());
 				Rayon r2(X, R);
-				lancerRayon(r2, lampes, spheres, image, width, pixel);
+				lancerRayonSphere(r2, lampes, spheres, image, width, pixel);
 			}
 		}
 		else
@@ -332,8 +384,6 @@ void CreateStructGridRec(Box3 b, vector<Box3>& boxes)
 	}
 }
 
-
-
 struct nodeTreeBox
 {
 	Box3 data;
@@ -354,7 +404,7 @@ int main(int argc, char* argv[])
 
 	vector<Box3> boxes;
 
-	createSpheres(spheres,10);
+	createSpheres(spheres, 10);
 	Box3 bEnglobante(Vector3(0, 0, 400), Vector3(1100, 1100, 1100), spheres, RandAlbedo());
 	CreateStructGridRec(bEnglobante, boxes);
 
@@ -367,6 +417,9 @@ int main(int argc, char* argv[])
 	int nbRayonAntialiasing = 1;
 	int nbRayonSmoothShadow = 1;
 
+	SearchSphereDich(Rayon(Point(500, 500, 0), Direction(0, 0, 1)),boxes);
+	SearchSphereDich(Rayon(Point(600, 600, 0), Direction(0, 0, 1)),boxes);
+
 	for (unsigned y = 0; y < height; y++)
 	{
 		for (unsigned x = 0; x < width; x++)
@@ -375,8 +428,9 @@ int main(int argc, char* argv[])
 			for (size_t i = 0; i < nbRayonAntialiasing; i++)
 			{
 				Direction d = (Vector3(x, y, 0) - Camera.GetPos()).normalize();
-				lancerRayon(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
-				lancerRayon2(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));
+
+				/*lancerRayon(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
+				lancerRayon2(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));*/
 			}
 		}
 	}
