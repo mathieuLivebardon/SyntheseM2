@@ -27,5 +27,4 @@ public:
 	{
 		return vec3_Dir;
 	}
-
 };

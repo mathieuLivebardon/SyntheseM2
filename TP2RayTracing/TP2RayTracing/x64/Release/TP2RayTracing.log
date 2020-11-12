@@ -1,31 +1,31 @@
 ﻿  Source.cpp
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(40,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(44,24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(78,39): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(80,39): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(82,39): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(84,38): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(100,56): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(155,35): warning C4305: 'initializing': truncation from 'double' to 'float'
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(171,41): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(175,41): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(180,37): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(187,33): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(212,39): warning C4305: 'initializing': truncation from 'double' to 'float'
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(230,49): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(234,49): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(240,45): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(256,33): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(350,43): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(350,40): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(351,111): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(351,108): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(352,110): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(352,107): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(44,10): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(48,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(79,36): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(81,36): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(83,36): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(85,36): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(101,53): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(151,26): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(166,26): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(170,26): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(175,25): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(180,24): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(201,26): warning C4305: 'initializing': truncation from 'double' to 'float'
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(219,27): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(223,27): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(229,26): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(244,24): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(377,31): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(377,28): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(378,99): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(378,96): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(379,98): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+D:\LYON 2\M2\SyntheseM2\TP2RayTracing\TP2RayTracing\Source.cpp(379,95): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
   Generating code
-  2 of 592 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+  1 of 610 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+    4 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   TP2RayTracing.vcxproj -> D:\LYON 2\M2\SyntheseM2\TP2RayTracing\x64\Release\TP2RayTracing.exe
