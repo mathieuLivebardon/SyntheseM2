@@ -12,14 +12,17 @@ public:
 	Vector3 bounds[2];
 	vector<Sphere> lst_spheres;
 
-	Box3(const Vector3& vmin, const Vector3& vmax, vector<Sphere> spheres, Vector3 albedo)
+	Box3(const Vector3& vmin, const Vector3& vmax, vector<Sphere> spheres, Vector3 albedo, bool createString = false)
 	{
 		
 		bounds[0] = vmin;
 		bounds[1] = vmax;
 		SetSpheres(spheres);
 		vec3_Albedo = albedo;
-		cout << "Creation de la boite || bMIN : " << vmin << " bMax : " << vmax << " Nombre de spheres : "<<lst_spheres.size() << endl;
+		if(createString)
+		{ 
+			cout << "Creation de la boite || bMIN : " << vmin << " bMax : " << vmax << " Nombre de spheres : "<<lst_spheres.size() << endl;
+		}
 	}
 
 	Box3(Sphere s)
@@ -36,10 +39,9 @@ public:
 	{
 		for (int i = 0; i < spheres.size(); i++)
 		{
-			Vector3 Scenter = spheres[i].GetCenter();
+			
 			//cout << Scenter << " : " << i;
-			if (Scenter.x >= bounds[0].x && Scenter.y >= bounds[0].y && Scenter.z >= bounds[0].z &&
-				Scenter.x <= bounds[1].x && Scenter.y <= bounds[1].y && Scenter.z <= bounds[1].z)
+			if (TestSphereAABB(spheres[i]))
 			{
 				lst_spheres.push_back(spheres[i]);
 				//cout << " IN BOX ";
@@ -47,4 +49,22 @@ public:
 			//cout << endl;
 		}
 	}
+
+	// Returns true if sphere s intersects AABB b, false otherwise
+	bool TestSphereAABB(Sphere s)
+	{
+		float sqDist = 0.0f;
+		Point p = s.GetCenter();
+
+		for (int i = 0; i < 3; i++) {
+			// for each axis count any excess distance outside box extents
+			float v = p.GetPos()[i];
+			if (v < bounds[0][i]) sqDist += (bounds[0][i] - v) * (bounds[0][i] - v);
+			if (v > bounds[1][i]) sqDist += (v - bounds[1][i]) * (v - bounds[1][i]);
+		}
+
+		return sqDist <= s.GetRadius() * s.GetRadius();
+	}
+
+
 };

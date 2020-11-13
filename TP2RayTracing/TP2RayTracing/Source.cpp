@@ -414,14 +414,14 @@ void createSpheres(vector<Sphere>& spheres, int nSphere)
 {
 	for (int i = 0; i < nSphere; i++)
 	{
-		Sphere s(Sphere(RandomFloat(10, 100), Point(RandomFloat(0, 1100), RandomFloat(0, 1100), RandomFloat(400, 1100)), Vector3(RandomFloat(0, 1), RandomFloat(0, 1), RandomFloat(0, 1))));
+		Sphere s(Sphere(RandomFloat(10, 20), Point(RandomFloat(-1000, 2000), RandomFloat(-1000, 2000), RandomFloat(700, 5000)), Vector3(RandomFloat(0, 1), RandomFloat(0, 1), RandomFloat(0, 1))));
 		spheres.push_back(s);
 	}
 }
 
-void CreateStructGridRec(Box3 b, vector<Box3>& boxes)
+void CreateStructGridRec(Box3 b, vector<Box3>& boxes, int nSphere)
 {
-	if (b.lst_spheres.size() <= 5)
+	if (b.lst_spheres.size() <= nSphere)
 	{
 		boxes.push_back(b);
 	}
@@ -454,8 +454,8 @@ void CreateStructGridRec(Box3 b, vector<Box3>& boxes)
 		Box3 Child1(bMin, boundsC1, b.lst_spheres, RandAlbedo());
 		Box3 Child2(boundsC2, bMax, b.lst_spheres, RandAlbedo());
 
-		CreateStructGridRec(Child1, boxes);
-		CreateStructGridRec(Child2, boxes);
+		CreateStructGridRec(Child1, boxes,nSphere);
+		CreateStructGridRec(Child2, boxes,nSphere);
 	}
 }
 
@@ -492,16 +492,16 @@ int main(int argc, char* argv[])
 	lampes.push_back(Lampe(Point(500, 500, 0), Vector3(6000000000, 6000000000, 6000000000)));
 
 	vector<Box3> boxes;
-	createSpheres(spheres, 10);
+	createSpheres(spheres, 1000);
 	//spheres.push_back(Sphere(20, Point(100, 50, 400)));
 	spheres.push_back(Sphere(100, Point(50, 500, 600)));
 	Vector3 leftBot = Vector3();
 	Vector3 rightTop = Vector3();
 	GetMaxMin(leftBot, rightTop, spheres);
 	Box3 bEnglobante(leftBot, rightTop,spheres, RandAlbedo());
-	CreateStructGridRec(bEnglobante, boxes);
+	CreateStructGridRec(bEnglobante, boxes ,20);
 
-	cout <<"Nombre de boites créees : " << boxes.size() << endl;
+	cout <<"Nombre de boites creees : " << boxes.size() << endl;
 	//generate some image
 	unsigned width = 1000, height = 1000;
 	vector<double> image((width * height * 4), 0.0);
@@ -523,11 +523,11 @@ int main(int argc, char* argv[])
 			{
 				Direction d = (Vector3(x, y, 0) - Camera.GetPos()).normalize();
 				Rayon r(Point((float)x, (float)y, 0), d);
-				Color c = lancerRayonDich(r, lampes, boxes);
-				color2(image, Vector3(x, y, 0), width, c, 255);
+				/*Color c = lancerRayonDich(r, lampes, boxes);
+				color2(image, Vector3(x, y, 0), width, c, 255);*/
 				//SearchSphereDich(Rayon(Point((float)x, (float)y, 0), d), boxes);
-				//lancerRayonSphere(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
-				lancerRayonBox(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));
+				lancerRayonSphere(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
+				//lancerRayonBox(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));
 			}
 		}
 	}
