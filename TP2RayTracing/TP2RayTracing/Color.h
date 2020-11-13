@@ -25,4 +25,27 @@ public:
 	{
 		return vec3_Color;
 	}
+
+	float r()
+	{
+		return vec3_Color.x;
+	}
+	float g()
+	{
+		return vec3_Color.y;
+	}
+	float b()
+	{
+		return vec3_Color.z;
+	}
+
+
+
+	Color operator+(const Color col) {
+		Color thisCol;
+		thisCol.vec3_Color.x = this->vec3_Color.x + col.vec3_Color.x;
+		thisCol.vec3_Color.y = this->vec3_Color.y + col.vec3_Color.y;
+		thisCol.vec3_Color.z = this->vec3_Color.z + col.vec3_Color.z;
+		return thisCol;
+	}
 };

@@ -10,6 +10,10 @@ private:
 	Vector3 vec3_Albedo;
 
 public:
+
+	Sphere()
+	{
+	}
 	Sphere(float rad, Point c, Vector3 albedo = Vector3(1, 1, 1), bool m = false) {
 		b_Mirror = m;
 		f_Radius = rad;

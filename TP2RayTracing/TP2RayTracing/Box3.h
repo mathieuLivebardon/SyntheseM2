@@ -14,11 +14,12 @@ public:
 
 	Box3(const Vector3& vmin, const Vector3& vmax, vector<Sphere> spheres, Vector3 albedo)
 	{
-		cout << "Creation de la boite || bMIN : " << vmin << " bMax : " << vmax << endl;
+		
 		bounds[0] = vmin;
 		bounds[1] = vmax;
 		SetSpheres(spheres);
 		vec3_Albedo = albedo;
+		cout << "Creation de la boite || bMIN : " << vmin << " bMax : " << vmax << " Nombre de spheres : "<<lst_spheres.size() << endl;
 	}
 
 	Box3(Sphere s)
@@ -36,14 +37,14 @@ public:
 		for (int i = 0; i < spheres.size(); i++)
 		{
 			Vector3 Scenter = spheres[i].GetCenter();
-			cout << Scenter << " : " << i;
+			//cout << Scenter << " : " << i;
 			if (Scenter.x >= bounds[0].x && Scenter.y >= bounds[0].y && Scenter.z >= bounds[0].z &&
 				Scenter.x <= bounds[1].x && Scenter.y <= bounds[1].y && Scenter.z <= bounds[1].z)
 			{
 				lst_spheres.push_back(spheres[i]);
-				cout << " IN BOX ";
+				//cout << " IN BOX ";
 			}
-			cout << endl;
+			//cout << endl;
 		}
 	}
 };

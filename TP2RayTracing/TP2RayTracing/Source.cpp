@@ -10,12 +10,15 @@
 #include "Color.h"
 #include "Lampe.h"
 #include "Box3.h"
+#include <map>
+#include <utility>
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <random>
-#include <map>
 
 using namespace std;
+
 default_random_engine generator;
 uniform_real_distribution<float> distribution(-0.00f, 0.00f);
 
@@ -43,12 +46,20 @@ void sort(map<int, float>& M)
 	sort(A.begin(), A.end(), cmp);
 }
 
-float RandomFloat(float a, float b) {
+/*float RandomFloat(float a, float b) {
 	float random = ((float)rand()) / (float)RAND_MAX;
 	float diff = b - a;
 	float r = random * diff;
 	return a + r;
+}*/
+
+float RandomFloat(float a, float b) {
+	uniform_real_distribution<float> distributionFloat(a, b);
+
+	return distributionFloat(generator);
 }
+
+
 
 Vector3 RandAlbedo()
 {
@@ -91,7 +102,7 @@ optional<float> rayAABIntersect(Rayon r, Box3 b)
 	float tmin = max(max(min(t0x, t1x), min(t0y, t1y)), min(t0z, t1z));
 	float tmax = min(min(max(t0x, t1x), max(t0y, t1y)), max(t0z, t1z));
 
-	if (tmax > 0 && tmin < tmax && tmin >0)
+	if (tmax > 0 && tmin < tmax)
 	{
 		return tmin;
 	}
@@ -106,6 +117,17 @@ void color(std::vector<double>& img, Vector3 pixel, float w, float r, float g, f
 	img[4 * w * pixel.y + 4 * pixel.x + 1] += g;
 
 	img[4 * w * pixel.y + 4 * pixel.x + 2] += b;
+
+	img[4 * w * pixel.y + 4 * pixel.x + 3] = a;
+}
+
+void color2(std::vector<double>& img, Vector3 pixel, float w, Color c, float a)
+{
+	img[4 * w * pixel.y + 4 * pixel.x + 0] += c.r();
+
+	img[4 * w * pixel.y + 4 * pixel.x + 1] += c.g();
+
+	img[4 * w * pixel.y + 4 * pixel.x + 2] += c.b();
 
 	img[4 * w * pixel.y + 4 * pixel.x + 3] = a;
 }
@@ -177,13 +199,29 @@ map<int, float> searchBox(vector<Box3> boxes, Rayon r)
 	return mapBiDst;
 }
 
-void SearchSphereDich(Rayon r, vector<Box3> boxes)
+optional<pair<Sphere, float>> SearchSphereDich(Rayon r, vector<Box3> boxes)
 {
 	map<int, float> RIntersectB = searchBox(boxes, r);
-	for (auto it = RIntersectB.begin(); it != RIntersectB.end(); ++it)
+	/*for (auto it = RIntersectB.begin(); it != RIntersectB.end(); ++it)
 	{
 		cout <<"Box"<< it->first << " => " << it->second << " bMin : "<< boxes[it->first].bounds[0] << " bMax : " << boxes[it->first].bounds[1] << '\n';
+	}*/
+	optional<pair<Sphere, float>> sdst = nullopt;
+	auto it = RIntersectB.begin();
+	while (it != RIntersectB.end())
+	{
+		vector<Sphere> spheres = boxes[it->first].lst_spheres;
+		optional<float>min_dstSphereinBox = nullopt;
+		int sphereindex = 0;
+		searchCloserObject(spheres, r, sphereindex, min_dstSphereinBox);
+		if (min_dstSphereinBox)
+		{
+			sdst = pair<Sphere, float>(spheres[sphereindex], min_dstSphereinBox.value());
+			return sdst;
+		}
+		++it;
 	}
+	return nullopt;
 }
 
 void lancerRayonBox(Rayon r, vector<Lampe> lampes, vector<Box3> boxes, vector<double>& image, unsigned width, Vector3 pixel)
@@ -201,9 +239,9 @@ void lancerRayonBox(Rayon r, vector<Lampe> lampes, vector<Box3> boxes, vector<do
 		if (min_dst)
 		{
 			float epsilone = -0.05;
-
 			X = Point(r.GetOrigin().x + min_dst.value() * r.GetDirection().x, r.GetOrigin().y + min_dst.value() * r.GetDirection().y, r.GetOrigin().z + min_dst.value() * r.GetDirection().z);
 			X = Point(X.GetPos() + r.GetDirection() * epsilone);
+
 			vec_dir = (lampes[l].GetPos() - X.GetPos()).normalize();
 			dir = Direction(vec_dir.x, vec_dir.y, vec_dir.z);
 			Vector3 L = X.GetPos() - lampes[l].GetPos();
@@ -215,7 +253,7 @@ void lancerRayonBox(Rayon r, vector<Lampe> lampes, vector<Box3> boxes, vector<do
 			{
 				if (lampe.value() > d)
 				{
-					color(image, pixel, width, boxes[boxindex].GetAlbedo().x * 255, boxes[boxindex].GetAlbedo().y * 255, boxes[boxindex].GetAlbedo().z * 255, 255);
+					color(image, pixel, width, boxes[boxindex].GetAlbedo().x * 255, boxes[boxindex].GetAlbedo().y * 255, boxes[boxindex].GetAlbedo().z * 255, 100);
 				}
 				else
 				{
@@ -224,7 +262,7 @@ void lancerRayonBox(Rayon r, vector<Lampe> lampes, vector<Box3> boxes, vector<do
 			}
 			else
 			{
-				color(image, pixel, width, boxes[boxindex].GetAlbedo().x * 255, boxes[boxindex].GetAlbedo().y * 255, boxes[boxindex].GetAlbedo().z * 255, 255);
+				color(image, pixel, width, boxes[boxindex].GetAlbedo().x * 255, boxes[boxindex].GetAlbedo().y * 255, boxes[boxindex].GetAlbedo().z * 255, 100);
 			}
 		}
 		else
@@ -298,6 +336,43 @@ void lancerRayonSphere(Rayon r, vector<Lampe> lampes, vector<Sphere> spheres, ve
 	}
 }
 
+Color lancerRayonDich(Rayon r, vector<Lampe>lampes, vector<Box3> boxes)
+{
+	auto SpherePick = SearchSphereDich(r, boxes);
+	Color c = Color();
+	if (SpherePick) {
+		float dst = SpherePick.value().second;
+		Point X;
+		Vector3 vec_dir;
+		Direction dir;
+		float epsilone = -0.05;
+		X = Point(r.GetOrigin().x + dst * r.GetDirection().x, r.GetOrigin().y + dst * r.GetDirection().y, r.GetOrigin().z + dst * r.GetDirection().z);
+		X = Point(X.GetPos() + r.GetDirection() * epsilone);
+
+		for (int li = 0; li < lampes.size(); li++)
+		{
+			vec_dir = (lampes[li].GetPos() - X.GetPos()).normalize();
+			dir = Direction(vec_dir.x, vec_dir.y, vec_dir.z);
+			Vector3 L = X.GetPos() - lampes[li].GetPos();
+			L = Vector3(L.x, L.y, L.z);
+			float d = L.length();
+			int sphereindexCloserLampe = 0;
+			auto SphereCloserLampe = SearchSphereDich(Rayon(X, dir), boxes);
+			if (SphereCloserLampe)
+			{
+				if (SphereCloserLampe.value().second > d)
+				{
+					c = c + computeColor(lampes[li], SpherePick.value().first, SpherePick.value().first.GetAlbedo(), X);
+				}
+			}
+			else
+			{
+				c = c + computeColor(lampes[li], SpherePick.value().first, SpherePick.value().first.GetAlbedo(), X);
+			}
+		}
+	}
+	return c;
+}
 void uniformeImg(vector<double>& image, vector<unsigned char>& imageOut)
 {
 	double max = 0;
@@ -384,12 +459,26 @@ void CreateStructGridRec(Box3 b, vector<Box3>& boxes)
 	}
 }
 
-struct nodeTreeBox
+void GetMaxMin(Vector3& Min, Vector3& Max, vector<Sphere> spheres)
 {
-	Box3 data;
-	struct nodeTreeBox* left;
-	struct nodeTreeBox* right;
-};
+	Vector3 min = Vector3(spheres[0].GetCenter().x - spheres[0].GetRadius(), spheres[0].GetCenter().y - spheres[0].GetRadius(), spheres[0].GetCenter().z - spheres[0].GetRadius());
+	Vector3 max = Vector3(spheres[0].GetCenter().x + spheres[0].GetRadius(), spheres[0].GetCenter().y + spheres[0].GetRadius(), spheres[0].GetCenter().z + spheres[0].GetRadius());
+	for (int si = 1; si < spheres.size(); si++)
+	{
+		min.x > spheres[si].GetCenter().x - spheres[si].GetRadius() ? min.x = spheres[si].GetCenter().x - spheres[si].GetRadius() : min.x;
+		min.y > spheres[si].GetCenter().y - spheres[si].GetRadius() ? min.y = spheres[si].GetCenter().y - spheres[si].GetRadius() : min.y;
+		min.z > spheres[si].GetCenter().z - spheres[si].GetRadius() ? min.z = spheres[si].GetCenter().z - spheres[si].GetRadius() : min.z;		
+		
+		max.x < spheres[si].GetCenter().x + spheres[si].GetRadius() ? max.x = spheres[si].GetCenter().x + spheres[si].GetRadius() : max.x;
+		max.y < spheres[si].GetCenter().y + spheres[si].GetRadius() ? max.y = spheres[si].GetCenter().y + spheres[si].GetRadius() : max.y;
+		max.z < spheres[si].GetCenter().z + spheres[si].GetRadius() ? max.z = spheres[si].GetCenter().z + spheres[si].GetRadius() : max.z;
+	}
+	float offset = 10.0f;
+	/*Min = Vector3(min.x-offset,min.y-offset,min.z-offset);
+	Max = Vector3(max.x+offset,max.y+offset,max.z+offset);*/
+	Min = min-offset;
+	Max = max+offset;
+}
 
 int main(int argc, char* argv[])
 {
@@ -398,17 +487,21 @@ int main(int argc, char* argv[])
 	vector<Sphere> spheres;
 
 	vector<Lampe> lampes;
-	lampes.push_back(Lampe(Point(350, 400, 0), Vector3(600000000, 600000000, 600000000)));
+	lampes.push_back(Lampe(Point(100, 150, 200), Vector3(600000000, 600000000, 600000000)));
 	lampes.push_back(Lampe(Point(700, 0, 200), Vector3(600000000, 0, 0)));
-	lampes.push_back(Lampe(Point(750, 110, 300), Vector3(0, 0, 600000000)));
+	lampes.push_back(Lampe(Point(500, 500, 0), Vector3(6000000000, 6000000000, 6000000000)));
 
 	vector<Box3> boxes;
-
 	createSpheres(spheres, 10);
-	Box3 bEnglobante(Vector3(0, 0, 400), Vector3(1100, 1100, 1100), spheres, RandAlbedo());
+	//spheres.push_back(Sphere(20, Point(100, 50, 400)));
+	spheres.push_back(Sphere(100, Point(50, 500, 600)));
+	Vector3 leftBot = Vector3();
+	Vector3 rightTop = Vector3();
+	GetMaxMin(leftBot, rightTop, spheres);
+	Box3 bEnglobante(leftBot, rightTop,spheres, RandAlbedo());
 	CreateStructGridRec(bEnglobante, boxes);
 
-	cout << boxes.size() << endl;
+	cout <<"Nombre de boites créees : " << boxes.size() << endl;
 	//generate some image
 	unsigned width = 1000, height = 1000;
 	vector<double> image((width * height * 4), 0.0);
@@ -417,9 +510,10 @@ int main(int argc, char* argv[])
 	int nbRayonAntialiasing = 1;
 	int nbRayonSmoothShadow = 1;
 
-	SearchSphereDich(Rayon(Point(500, 500, 0), Direction(0, 0, 1)),boxes);
-	SearchSphereDich(Rayon(Point(600, 600, 0), Direction(0, 0, 1)),boxes);
-
+	//SearchSphereDich(Rayon(Point(500, 500, 0), Direction(0, 0, 1)),boxes);
+	//SearchSphereDich(Rayon(Point(600, 600, 0), Direction(0, 0, 1)),boxes);
+	//cout << lancerRayonDich(Rayon(Point(10, 50, 0), Direction(0, 0, 1)), lampes, boxes).GetColorRGB() << endl;
+	//cout << lancerRayonDich(Rayon(Point(311, 500, 0), Direction(0, 0, 1)), lampes, boxes).GetColorRGB()<<endl;
 	for (unsigned y = 0; y < height; y++)
 	{
 		for (unsigned x = 0; x < width; x++)
@@ -428,9 +522,12 @@ int main(int argc, char* argv[])
 			for (size_t i = 0; i < nbRayonAntialiasing; i++)
 			{
 				Direction d = (Vector3(x, y, 0) - Camera.GetPos()).normalize();
-
-				/*lancerRayon(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
-				lancerRayon2(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));*/
+				Rayon r(Point((float)x, (float)y, 0), d);
+				Color c = lancerRayonDich(r, lampes, boxes);
+				color2(image, Vector3(x, y, 0), width, c, 255);
+				//SearchSphereDich(Rayon(Point((float)x, (float)y, 0), d), boxes);
+				//lancerRayonSphere(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
+				lancerRayonBox(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));
 			}
 		}
 	}
