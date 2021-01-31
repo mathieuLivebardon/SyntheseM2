@@ -39,8 +39,6 @@ public:
 		return vec3_Color.z;
 	}
 
-
-
 	Color operator+(const Color col) {
 		Color thisCol;
 		thisCol.vec3_Color.x = this->vec3_Color.x + col.vec3_Color.x;

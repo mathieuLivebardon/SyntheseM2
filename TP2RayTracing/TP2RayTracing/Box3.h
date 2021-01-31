@@ -11,17 +11,18 @@ class Box3
 public:
 	Vector3 bounds[2];
 	vector<Sphere> lst_spheres;
+	float fSize;
 
 	Box3(const Vector3& vmin, const Vector3& vmax, vector<Sphere> spheres, Vector3 albedo, bool createString = false)
 	{
-		
 		bounds[0] = vmin;
 		bounds[1] = vmax;
 		SetSpheres(spheres);
 		vec3_Albedo = albedo;
-		if(createString)
-		{ 
-			cout << "Creation de la boite || bMIN : " << vmin << " bMax : " << vmax << " Nombre de spheres : "<<lst_spheres.size() << endl;
+		fSize = (vmax.x - vmin.x) + (vmax.y - vmin.y) + (vmax.z - vmin.z);
+		if (createString)
+		{
+			ToString();
 		}
 	}
 
@@ -39,7 +40,6 @@ public:
 	{
 		for (int i = 0; i < spheres.size(); i++)
 		{
-			
 			//cout << Scenter << " : " << i;
 			if (TestSphereAABB(spheres[i]))
 			{
@@ -66,5 +66,8 @@ public:
 		return sqDist <= s.GetRadius() * s.GetRadius();
 	}
 
-
+	void ToString(string gen = "")
+	{
+		cout << gen << "Creation de la boite || bMIN : " << bounds[0] << " bMax : " << bounds[1] << " Nombre de spheres : " << lst_spheres.size() << " Taille : " << fSize << endl;
+	}
 };

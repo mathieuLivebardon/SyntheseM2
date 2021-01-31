@@ -12,6 +12,7 @@
 #include "Box3.h"
 #include <map>
 #include <utility>
+#include <time.h>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -20,6 +21,7 @@
 using namespace std;
 
 default_random_engine generator;
+default_random_engine generator2;
 uniform_real_distribution<float> distribution(-0.00f, 0.00f);
 
 // Comparator function to sort pairs
@@ -56,10 +58,8 @@ void sort(map<int, float>& M)
 float RandomFloat(float a, float b) {
 	uniform_real_distribution<float> distributionFloat(a, b);
 
-	return distributionFloat(generator);
+	return distributionFloat(generator2);
 }
-
-
 
 Vector3 RandAlbedo()
 {
@@ -391,7 +391,7 @@ void uniformeImg(vector<double>& image, vector<unsigned char>& imageOut)
 			max = image[i + 2];
 		}
 	}
-	max /= 4;
+	max *= 0.1;
 	for (size_t i = 0; i < image.size(); i += 4)
 	{
 		imageOut[i] = clamp((int)(image[i] / max * 255), 0, 255);
@@ -404,7 +404,7 @@ void createObject(vector<Sphere>& spheres, vector<Box3>& boxes, int nSphere)
 {
 	for (int i = 0; i < nSphere; i++)
 	{
-		Sphere s(Sphere(RandomFloat(10, 100), Point(RandomFloat(0, 1100), RandomFloat(0, 1100), RandomFloat(700, 5000)), Vector3(RandomFloat(0, 1), RandomFloat(0, 1), RandomFloat(0, 1))));
+		Sphere s(Sphere(RandomFloat(10, 100), Point(RandomFloat(0, 1100), RandomFloat(0, 1100), RandomFloat(700, 2000)), Vector3(RandomFloat(0, 1), RandomFloat(0, 1), RandomFloat(0, 1))));
 		spheres.push_back(s);
 		boxes.push_back(Box3(s));
 	}
@@ -414,13 +414,14 @@ void createSpheres(vector<Sphere>& spheres, int nSphere)
 {
 	for (int i = 0; i < nSphere; i++)
 	{
-		Sphere s(Sphere(RandomFloat(10, 20), Point(RandomFloat(-1000, 2000), RandomFloat(-1000, 2000), RandomFloat(700, 5000)), Vector3(RandomFloat(0, 1), RandomFloat(0, 1), RandomFloat(0, 1))));
+		Sphere s(Sphere(RandomFloat(10, 50), Point(RandomFloat(-500, 1600), RandomFloat(-500, 1600), RandomFloat(700, 4000)), Vector3(RandomFloat(0, 1), RandomFloat(0, 1), RandomFloat(0, 1))));
 		spheres.push_back(s);
 	}
 }
 
-void CreateStructGridRec(Box3 b, vector<Box3>& boxes, int nSphere)
+void CreateStructGridRec(Box3 b, vector<Box3>& boxes, int nSphere, string gen)
 {
+	//cout << gen << b.lst_spheres.size() << " " << b.bounds[0] << " / " << b.bounds[1] << endl;
 	if (b.lst_spheres.size() <= nSphere)
 	{
 		boxes.push_back(b);
@@ -435,6 +436,7 @@ void CreateStructGridRec(Box3 b, vector<Box3>& boxes, int nSphere)
 
 		Vector3 boundsC1;
 		Vector3 boundsC2;
+
 		if (dX >= dY && dX >= dZ)
 		{
 			boundsC1 = Vector3(bMax.x - dX / 2, bMax.y, bMax.z);
@@ -451,11 +453,47 @@ void CreateStructGridRec(Box3 b, vector<Box3>& boxes, int nSphere)
 			boundsC1 = Vector3(bMax.x, bMax.y, bMax.z - dZ / 2);
 			boundsC2 = Vector3(bMin.x, bMin.y, bMin.z + dZ / 2);;
 		}
-		Box3 Child1(bMin, boundsC1, b.lst_spheres, RandAlbedo());
-		Box3 Child2(boundsC2, bMax, b.lst_spheres, RandAlbedo());
+		if (b.fSize < 1.0f)
+		{
+			boxes.push_back(b);
+		}
+		else
+		{
+			Box3 Child1(bMin, boundsC1, b.lst_spheres, RandAlbedo());
+			Box3 Child2(boundsC2, bMax, b.lst_spheres, RandAlbedo());
+			bool samelstSphere = false;
+			if (Child1.lst_spheres.size() == Child2.lst_spheres.size())
+			{
+				samelstSphere = true;
+				for (int i = 0; i < Child1.lst_spheres.size(); i++)
+				{
+					if (Child1.lst_spheres.at(i).GetCenter() != Child2.lst_spheres.at(i).GetCenter())
+					{
+						//cout << i << " : " << Child1.lst_spheres.at(i).GetCenter() << " / " << Child2.lst_spheres.at(i).GetCenter() << endl;
+						samelstSphere = false;
+					}
+				}
+			}
+			if (!samelstSphere)
+			{
+				if (Child1.lst_spheres.size() > 0)
+				{
+					CreateStructGridRec(Child1, boxes, nSphere, gen += " | ");
+				}
+				if (Child2.lst_spheres.size() > 0)
+				{
+					CreateStructGridRec(Child2, boxes, nSphere, gen += " | ");
+				}
+			}
+			else
+			{
+				//b.ToString(gen);
+				//Child1.ToString(gen + " Child1 ");
+				//Child2.ToString(gen + " Child2 ");
 
-		CreateStructGridRec(Child1, boxes,nSphere);
-		CreateStructGridRec(Child2, boxes,nSphere);
+				boxes.push_back(b);
+			}
+		}
 	}
 }
 
@@ -467,8 +505,8 @@ void GetMaxMin(Vector3& Min, Vector3& Max, vector<Sphere> spheres)
 	{
 		min.x > spheres[si].GetCenter().x - spheres[si].GetRadius() ? min.x = spheres[si].GetCenter().x - spheres[si].GetRadius() : min.x;
 		min.y > spheres[si].GetCenter().y - spheres[si].GetRadius() ? min.y = spheres[si].GetCenter().y - spheres[si].GetRadius() : min.y;
-		min.z > spheres[si].GetCenter().z - spheres[si].GetRadius() ? min.z = spheres[si].GetCenter().z - spheres[si].GetRadius() : min.z;		
-		
+		min.z > spheres[si].GetCenter().z - spheres[si].GetRadius() ? min.z = spheres[si].GetCenter().z - spheres[si].GetRadius() : min.z;
+
 		max.x < spheres[si].GetCenter().x + spheres[si].GetRadius() ? max.x = spheres[si].GetCenter().x + spheres[si].GetRadius() : max.x;
 		max.y < spheres[si].GetCenter().y + spheres[si].GetRadius() ? max.y = spheres[si].GetCenter().y + spheres[si].GetRadius() : max.y;
 		max.z < spheres[si].GetCenter().z + spheres[si].GetRadius() ? max.z = spheres[si].GetCenter().z + spheres[si].GetRadius() : max.z;
@@ -476,8 +514,8 @@ void GetMaxMin(Vector3& Min, Vector3& Max, vector<Sphere> spheres)
 	float offset = 10.0f;
 	/*Min = Vector3(min.x-offset,min.y-offset,min.z-offset);
 	Max = Vector3(max.x+offset,max.y+offset,max.z+offset);*/
-	Min = min-offset;
-	Max = max+offset;
+	Min = min - offset;
+	Max = max + offset;
 }
 
 int main(int argc, char* argv[])
@@ -487,21 +525,19 @@ int main(int argc, char* argv[])
 	vector<Sphere> spheres;
 
 	vector<Lampe> lampes;
-	lampes.push_back(Lampe(Point(100, 150, 200), Vector3(600000000, 600000000, 600000000)));
-	lampes.push_back(Lampe(Point(700, 0, 200), Vector3(600000000, 0, 0)));
+	//lampes.push_back(Lampe(Point(150, 150, 400), Vector3(6000000000, 6000000000, 3000000000)));
+	lampes.push_back(Lampe(Point(500, 1100, 2000), Vector3(600000000, 600000000, 600000000)));
 	lampes.push_back(Lampe(Point(500, 500, 0), Vector3(6000000000, 6000000000, 6000000000)));
 
 	vector<Box3> boxes;
-	createSpheres(spheres, 1000);
-	//spheres.push_back(Sphere(20, Point(100, 50, 400)));
+	createSpheres(spheres, 999);
 	spheres.push_back(Sphere(100, Point(50, 500, 600)));
 	Vector3 leftBot = Vector3();
 	Vector3 rightTop = Vector3();
 	GetMaxMin(leftBot, rightTop, spheres);
-	Box3 bEnglobante(leftBot, rightTop,spheres, RandAlbedo());
-	CreateStructGridRec(bEnglobante, boxes ,20);
+	Box3 bEnglobante(leftBot, rightTop, spheres, RandAlbedo(), true);
+	CreateStructGridRec(bEnglobante, boxes, 5, "");
 
-	cout <<"Nombre de boites creees : " << boxes.size() << endl;
 	//generate some image
 	unsigned width = 1000, height = 1000;
 	vector<double> image((width * height * 4), 0.0);
@@ -510,6 +546,35 @@ int main(int argc, char* argv[])
 	int nbRayonAntialiasing = 1;
 	int nbRayonSmoothShadow = 1;
 
+	float temps;
+	clock_t t1, t2;
+
+	int sommeS = 0;
+	int nBoiteVide = 0;
+	for (int i = 0; i < boxes.size(); i++)
+	{
+		sommeS += boxes.at(i).lst_spheres.size();
+	}
+
+	bool dich = false;
+	if (dich)
+	{
+		cout << "Lancer de RAYONS Recherches Dichotomique : " << endl;
+		cout << "Nombre de Lampes : " << lampes.size() << endl;
+		cout << "Dimension Boite Englobante : " << leftBot << " " << rightTop << endl;
+		cout << "Nombre de Spheres : " << spheres.size() << endl;
+		cout << "Nombre de Spheres dans les boites au total : " << sommeS << endl;
+		cout << "Nombre de boites creees : " << boxes.size() << endl;
+		cout << "Nombre de Spheres par Boites en moyennee: " << (float)(sommeS) / (float)(boxes.size()) << endl;
+	}
+	else
+	{
+		cout << "Lancer de RAYONS Classique : " << endl;
+		cout << "Nombre de Lampes : " << lampes.size() << endl;
+		cout << "Nombre de Spheres : " << spheres.size() << endl;
+	}
+
+	t1 = clock();
 	//SearchSphereDich(Rayon(Point(500, 500, 0), Direction(0, 0, 1)),boxes);
 	//SearchSphereDich(Rayon(Point(600, 600, 0), Direction(0, 0, 1)),boxes);
 	//cout << lancerRayonDich(Rayon(Point(10, 50, 0), Direction(0, 0, 1)), lampes, boxes).GetColorRGB() << endl;
@@ -523,17 +588,25 @@ int main(int argc, char* argv[])
 			{
 				Direction d = (Vector3(x, y, 0) - Camera.GetPos()).normalize();
 				Rayon r(Point((float)x, (float)y, 0), d);
-				/*Color c = lancerRayonDich(r, lampes, boxes);
-				color2(image, Vector3(x, y, 0), width, c, 255);*/
+				if (dich)
+				{
+					//Color c = lancerRayonDich(r, lampes, boxes);
+					color2(image, Vector3(x, y, 0), width, lancerRayonDich(r, lampes, boxes), 255);
+				}
+				else
+				{
+					lancerRayonSphere(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
+				}
 				//SearchSphereDich(Rayon(Point((float)x, (float)y, 0), d), boxes);
-				lancerRayonSphere(Rayon(Point((float)x, (float)y, 0), d), lampes, spheres, image, width, Vector3(x, y, 0));
 				//lancerRayonBox(Rayon(Point((float)x, (float)y, 0), d), lampes, boxes, image, width, Vector3(x, y, 0));
 			}
 		}
 	}
-
+	t2 = clock();
+	temps = (float)(t2 - t1) / CLOCKS_PER_SEC;
+	printf("temps de creation de l'image = %f\n", temps);
 	uniformeImg(image, imageOut);
 	encodeOneStep(filename, imageOut, width, height);
-
+	system("pause");
 	return 0;
 }
