@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+Cours de Synthese du Master2 Gamagora 
+=======
 # Synthesis course Master 2 Gamagora 
 Mainly composed of **Ray Tracing** work. 
 
@@ -12,3 +15,4 @@ Draw PNG computed by RayTracing
 ![til](RayTracing200rayons0.01off.png)
 
 ![til](RayTracingpleinsdecube.png)
+>>>>>>> main

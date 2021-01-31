@@ -2,15 +2,14 @@
 #include "vector3.h"
 
 class Point {
-private :
+private:
 	Vector3 vec3_Position;
 
-public :
+public:
 	Point()
 	{
 		vec3_Position = Vector3(0, 0, 0);
 	}
-
 
 	Point(float x, float y, float z)
 	{
@@ -19,12 +18,11 @@ public :
 
 	Point(Vector3 vec3)
 	{
-		vec3_Position =vec3;
+		vec3_Position = vec3;
 	}
 
 	Vector3 GetPos()
 	{
 		return vec3_Position;
 	}
-
 };
