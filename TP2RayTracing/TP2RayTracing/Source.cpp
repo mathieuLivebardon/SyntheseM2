@@ -20,9 +20,9 @@
 
 using namespace std;
 
-default_random_engine generator;
-default_random_engine generator2;
-uniform_real_distribution<float> distribution(-0.00f, 0.00f);
+std::random_device rd;
+std::mt19937 e2(rd());
+std::uniform_real_distribution<> dist(0.0f, .0f);
 
 // Comparator function to sort pairs
 // according to second value
@@ -58,7 +58,7 @@ void sort(map<int, float>& M)
 float RandomFloat(float a, float b) {
 	uniform_real_distribution<float> distributionFloat(a, b);
 
-	return distributionFloat(generator2);
+	return distributionFloat(e2);
 }
 
 Vector3 RandAlbedo()
@@ -274,7 +274,7 @@ void lancerRayonBox(Rayon r, vector<Lampe> lampes, vector<Box3> boxes, vector<do
 
 void lancerRayonSphere(Rayon r, vector<Lampe> lampes, vector<Sphere> spheres, vector<double>& image, unsigned width, Vector3 pixel)
 {
-	r.SetDirection(Direction(Vector3(r.GetDirection().x + distribution(generator), r.GetDirection().y + distribution(generator), r.GetDirection().z + distribution(generator))));
+	r.SetDirection(Direction(Vector3(r.GetDirection().x + dist(e2), r.GetDirection().y + dist(e2), r.GetDirection().z + dist(e2))));
 	for (int l = 0; l < lampes.size(); l++)
 	{
 		Point X;
@@ -530,7 +530,7 @@ int main(int argc, char* argv[])
 	lampes.push_back(Lampe(Point(500, 500, 0), Vector3(6000000000, 6000000000, 6000000000)));
 
 	vector<Box3> boxes;
-	createSpheres(spheres, 999);
+	createSpheres(spheres, 99);
 	spheres.push_back(Sphere(100, Point(50, 500, 600)));
 	Vector3 leftBot = Vector3();
 	Vector3 rightTop = Vector3();
@@ -556,7 +556,7 @@ int main(int argc, char* argv[])
 		sommeS += boxes.at(i).lst_spheres.size();
 	}
 
-	bool dich = false;
+	bool dich = true;
 	if (dich)
 	{
 		cout << "Lancer de RAYONS Recherches Dichotomique : " << endl;
@@ -579,10 +579,21 @@ int main(int argc, char* argv[])
 	//SearchSphereDich(Rayon(Point(600, 600, 0), Direction(0, 0, 1)),boxes);
 	//cout << lancerRayonDich(Rayon(Point(10, 50, 0), Direction(0, 0, 1)), lampes, boxes).GetColorRGB() << endl;
 	//cout << lancerRayonDich(Rayon(Point(311, 500, 0), Direction(0, 0, 1)), lampes, boxes).GetColorRGB()<<endl;
+	float amountPixels = height * width;
+	int percent = -1;
+	int counter = 1;
+	cout << "Progression : ";
 	for (unsigned y = 0; y < height; y++)
 	{
 		for (unsigned x = 0; x < width; x++)
 		{
+			int currentPercent = float(counter / amountPixels)*100;
+			if (currentPercent != percent)
+			{
+				percent = currentPercent;
+				cout << percent << "% . ";
+			}
+			counter++;
 			//cout << "pixel : " << x << " ; " << y << endl;
 			for (size_t i = 0; i < nbRayonAntialiasing; i++)
 			{
